@@ -3,7 +3,6 @@ package com.example.chat.controller;
 import com.example.chat.entiy.LoginRequest;
 import com.example.chat.entiy.RegisterRequest;
 import com.example.chat.entiy.User;
-import com.example.chat.mapper.Userdao;
 import com.example.chat.upper.Usermapper;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
