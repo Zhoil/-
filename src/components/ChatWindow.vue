@@ -8,7 +8,6 @@
 <script>
 import MessageList from './MessageList.vue';
 import MessageInput from './MessageInput.vue';
-// import FriendList from "@/components/FriendList.vue";
 
 export default {
   components: {
