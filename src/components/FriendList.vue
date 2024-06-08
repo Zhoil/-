@@ -55,17 +55,22 @@ export default {
       alertTitle: '',
       alertMessage: '',
       loading: false,
-      loadingTime: 600 // 设置加载时间
+      loadingTime1: 600, // 设置加载时间
+      loadingTime2: 100
     };
   },
   methods: {
-    // selectFriend(friend) {
-    //   this.showAlert('Loading', '', true);
-    //   setTimeout(() => {
-    //     this.updateAlert('Success', friend.name, false);
-    //   }, this.loadingTime);
-    //
-    // },
+    selectFriend(friend) {
+      setTimeout(() => {
+        this.$router.push('/Chat/'+friend.name);
+
+        // this.currentFriend = friend;
+        // // 保存当前选中好友到本地存储
+        // localStorage.setItem('currentFriend', JSON.stringify(friend));
+
+      }, this.loadingTime2);
+
+    },
     subscribeButton(){
       if (this.searchText) {
         this.showAlert('Loading', '', true);
@@ -83,7 +88,7 @@ export default {
                 this.updateAlert('Error', `There was an error! ${error}`, false);
                 console.error('There was an error!', error);
               });
-        }, this.loadingTime);
+        }, this.loadingTime1);
       } else {
         this.showAlert('Error', 'Please enter text to subscribe.', false);
       }
