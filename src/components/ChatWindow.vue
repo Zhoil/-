@@ -2,18 +2,16 @@
   <div class="chat-window">
     <MessageList :messages="messages" />
     <MessageInput @sendMessage="handleSendMessage" />
-    <FriendList />
   </div>
 </template>
 
 <script>
 import MessageList from './MessageList.vue';
 import MessageInput from './MessageInput.vue';
-import FriendList from "@/components/FriendList.vue";
+// import FriendList from "@/components/FriendList.vue";
 
 export default {
   components: {
-    FriendList,
     MessageList,
     MessageInput
   },
@@ -46,4 +44,5 @@ export default {
   border: 1px solid #ccc;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+
 </style>
