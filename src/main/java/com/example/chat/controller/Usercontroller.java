@@ -1,6 +1,7 @@
 package com.example.chat.controller;
 
 import com.example.chat.entiy.LoginRequest;
+import com.example.chat.entiy.Mess_save;
 import com.example.chat.entiy.RegisterRequest;
 import com.example.chat.entiy.User;
 import com.example.chat.upper.Usermapper;
@@ -37,12 +38,22 @@ public class Usercontroller {
         return "Search";
     }
 
+    @Operation(summary = "发送好友请求")
+    @GetMapping("/api/add_req")
+    public String req(@RequestParam("name") String name) throws Exception {
+        User user = usermapper.getUser(name);
+        //向指定用户发送好友请求
+
+        if(user!=null) return "OK";
+        else return "NO";
+    }
+
     @Operation(summary = "查询用户")
     @GetMapping("/api/login/{name}")
-    public ResponseEntity<User> query(@PathVariable String name) throws Exception {
+    public String query(@PathVariable String name) throws Exception {
         User user = usermapper.getUser(name);
-        if(user!=null) return ResponseEntity.status(200).body(user);
-        else return ResponseEntity.status(404).body(null);
+        if(user!=null) return "OK";
+        else return "NO";
     }
 
     @Operation(summary = "发送请求，验证登陆")
@@ -64,9 +75,10 @@ public class Usercontroller {
         return ResponseEntity.ok("Registration successful");
     }
 
-    @GetMapping("/api/register")
-    public String testRegister() {
-        return "Register 请求\n"+"It's OK.";
+    @Operation(summary = "聊天信息存储")
+    @PostMapping("/api/save")
+    public void message_save(@RequestBody Mess_save mess_save) {
+        usermapper.insertMessage(mess_save);
     }
 
 }
