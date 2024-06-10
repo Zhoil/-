@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import ChatWindow from '../components/ChatWindow.vue';
+import ChatWindow from '../components/chatwindow/ChatWindow.vue';
 import FriendList from "@/components/FriendList.vue";
 
 export default {

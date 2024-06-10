@@ -1,5 +1,15 @@
 <template>
-  <div class="friend-list">
+
+  <button @click="toggleFriendList" class="cta">
+    <span>Hover me</span>
+    <svg width="15px" height="10px" viewBox="0 0 13 10">
+      <path d="M1,5 L11,5"></path>
+      <polyline points="8 1 12 5 8 9"></polyline>
+    </svg>
+  </button>
+
+  <div v-if="friendListVisible" class="friend-list">
+
     <h2>Friends List</h2>
     <ul>
       <li v-for="(friend, index) in friends" :key="index" @click="selectFriend(friend)">
@@ -45,14 +55,24 @@
       :loading="loading"
       @close="alertVisible = false"
   />
+
+  <SelfCard
+      v-if="selfVisible"
+      @close="selfVisible = false"
+  />
+
 </template>
 
 <script>
+import SelfCard from "@/components/card/SelfCard.vue";
 import CustomAlert from "@/components/CustomAlert.vue";
 import axios from "axios";
 
 export default {
-  components: {CustomAlert},
+  components: {
+    CustomAlert,
+    SelfCard
+  },
   data() {
     return {
       friends: [
@@ -75,16 +95,28 @@ export default {
         { name: 'David' },
         { name: 'David' }
       ],
+      friendListVisible: true,  // Add this line
       searchText:'',
       alertVisible: false,
       alertTitle: '',
       alertMessage: '',
       loading: false,
       loadingTime1: 600, // 设置加载时间
-      loadingTime2: 100
+      loadingTime2: 100,
+
+      selfVisible:false
     };
   },
   methods: {
+
+    mess3() {
+      this.selfVisible = true
+    },
+
+    toggleFriendList() {
+      this.friendListVisible = !this.friendListVisible;
+    },
+
     selectFriend(friend) {
       setTimeout(() => {
         this.$router.push('/Chat/'+friend.name);
@@ -96,6 +128,7 @@ export default {
       }, this.loadingTime2);
 
     },
+
     subscribeButton(){
       if (this.searchText) {
         this.showAlert('Loading', '', true);
@@ -118,6 +151,7 @@ export default {
         this.showAlert('Error', 'Please enter text to subscribe.', false);
       }
     },
+
     showAlert(title, message, loading) {
       this.alertTitle = title;
       this.alertMessage = message;
@@ -129,11 +163,78 @@ export default {
       this.alertMessage = message;
       this.loading = loading;
     },
+
   }
 };
 </script>
 
 <style>
+
+/* ***** 列表隐藏CSS ********** */
+
+.cta {
+  z-index: 1;
+  position: absolute;
+  margin: auto;
+  padding: 12px 18px;
+  transition: all 0.2s ease;
+  left: 10%;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.cta:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  border-radius: 50px;
+  background: #b1dae7;
+  width: 45px;
+  height: 45px;
+  transition: all 0.3s ease;
+}
+
+
+.cta span {
+  position: relative;
+  font-family: "Ubuntu", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #234567;
+}
+
+.cta svg {
+  position: relative;
+  top: 0;
+  margin-left: 10px;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke: #234567;
+  stroke-width: 2;
+  transform: translateX(-5px);
+  transition: all 0.3s ease;
+}
+
+.cta:hover:before {
+  width: 100%;
+  background: #b1dae7;
+}
+
+.cta:hover svg {
+  transform: translateX(0);
+}
+
+.cta:active {
+  transform: scale(0.95);
+}
+
+
+/* *************************************** */
 
 .friend-list {
   opacity: 0.7;
@@ -271,5 +372,7 @@ export default {
 .value svg {
   width: 20px
 }
+
+/* **************************************** */
 
 </style>
