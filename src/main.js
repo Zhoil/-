@@ -11,6 +11,6 @@ axios.defaults.baseURL = 'http://127.0.0.1:8088';
 const app = createApp(App);
 app.use(store);
 app.use(router);
-app.use(createPinia())
+app.use(createPinia());
 app.mount('#app');
 

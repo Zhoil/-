@@ -12,6 +12,7 @@
     "core-js": "^3.8.3",
     "pinia": "^2.1.7",
     "vue": "^3.2.13",
+    "vue-native-websocket": "^2.0.15",
     "vue-router": "^4.3.2",
     "vuex": "^4.1.0"
   },

@@ -27,6 +27,13 @@ export default {
         sender: 'me'
       });
     }
+  },
+  receiveMessage(content) {
+    this.messages.push({
+      content: content,
+      timestamp: new Date(),
+      sender: 'other'
+    });
   }
 };
 </script>

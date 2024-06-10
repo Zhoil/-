@@ -50,6 +50,7 @@
 
 <script>
 import axios from "axios";
+import {mapState} from "vuex";
 
 export default {
   name: "HelloWorld",
@@ -61,10 +62,23 @@ export default {
       signupUsername: '',
       signupEmail: '',
       signupPassword: '',
-      confirmPassword: ''
+      confirmPassword: '',
+
+      checkUser:''
     }
   },
+
+  computed: {
+    ...mapState({
+      users: state => state.users
+    })
+  },
+
   methods: {
+    findUser() {
+      this.checkUser = this.users.find(user => user.name === this.loginUsername);
+    },
+
     toggleSignUp() {
       this.isSignUp = !this.isSignUp;
       if (this.isSignUp) {
@@ -75,6 +89,11 @@ export default {
     },
 
     signIn: function () {
+      this.findUser();
+      if(this.checkUser) {
+        alert("-----该用户已登录-----");
+        return;
+      }
       if(this.loginUsername === '') {
         alert("Please enter your name");
         return;
@@ -92,14 +111,27 @@ export default {
           .then(response => {
             if (response.status === 200) {
               window.alert("Successfully Login");
-              this.$router.push('/Chat' + "/" + this.loginUsername);
+
+              const users = JSON.parse(localStorage.getItem('users')) || [];
+              // 创建一个新的用户对象
+              const newUser = { username: this.loginUsername }; // 你可以根据实际情况定义新用户的属性
+              // 将新用户对象添加到 users 数组中
+              users.push(newUser);
+              // 将更新后的 users 数组保存到 localStorage 中
+              localStorage.setItem('users', JSON.stringify(users));
+
+              this.$store.commit('addUser', this.loginUsername);
+
+              this.$router.push('/Chat/' + this.loginUsername);
             } else window.alert(response.message);
             // 登录成功处理逻辑
             console.log(response);
 
           })
           .catch(error => {
-            window.alert("An error occurred while logging in");
+            window.alert("No this user or password false.");
+            this.loginUsername = '';
+            this.loginPassword = '';
             // 处理登录失败逻辑
             console.error(error);
           });

@@ -11,7 +11,7 @@
     <div id="dot"></div>
 
     <div class="modal-footer">
-      <button @click="closeCard">OK</button>
+      <button @click="closeCard">Back</button>
     </div>
 
   </div>
@@ -65,7 +65,7 @@ html, body {
   left: 50%;
   transform: translateX(-50%) translateY(-50%);
   z-index: 1;
-  animation: fadeIn 2s ease-in;
+  animation: fadeIn 1.5s ease-in;
 }
 
 .card {

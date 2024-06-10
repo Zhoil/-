@@ -44,6 +44,7 @@ export default {
   max-width: 60%;
   padding: 10px;
   border-radius: 10px;
+  font-size: 20px;
   background-color: #e6e6e6;
 }
 .message.sent .message-content {
