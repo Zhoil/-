@@ -112,13 +112,15 @@ export default {
             if (response.status === 200) {
               window.alert("Successfully Login");
 
-              const users = JSON.parse(localStorage.getItem('users')) || [];
-              // 创建一个新的用户对象
-              const newUser = { username: this.loginUsername }; // 你可以根据实际情况定义新用户的属性
-              // 将新用户对象添加到 users 数组中
-              users.push(newUser);
-              // 将更新后的 users 数组保存到 localStorage 中
-              localStorage.setItem('users', JSON.stringify(users));
+              // const users = JSON.parse(localStorage.getItem('users')) || [];
+              // // 创建一个新的用户对象
+              // const newUser = { username: this.loginUsername }; // 你可以根据实际情况定义新用户的属性
+              // // 将新用户对象添加到 users 数组中
+              // users.push(newUser);
+              // // 将更新后的 users 数组保存到 localStorage 中
+              // localStorage.setItem('users', JSON.stringify(users));
+              localStorage.setItem('user', JSON.stringify(this.loginUsername));
+
 
               this.$store.commit('addUser', this.loginUsername);
 

@@ -115,6 +115,7 @@ export default {
     },
 
     logout() {
+
         // 清除 localStorage 中的 'user' 键值对
         // localStorage.removeItem('user');
         const path = window.location.pathname;
@@ -150,18 +151,25 @@ export default {
         this.showAlert('Loading', '', true);
 
         setTimeout(() => {
-          axios.get(`http://127.0.0.1:8088/api/login/${this.searchText}`)
-              .then(response => {
-                if (response.data === 'OK') {
-                  this.updateAlert('Success', 'Subscribed successfully', false);
-                } else {
-                  this.updateAlert('Error', 'No searching user', false);
-                }
-              })
-              .catch(error => {
-                this.updateAlert('Error', `There was an error! ${error}`, false);
-                console.error('There was an error!', error);
-              });
+
+            axios({
+              method: 'GET',
+              url: '/api/user/searchUserByUserName',
+              params: {
+                name: this.searchText
+              }
+            })
+                .then(response => {
+                  if (response.data === 'OK') {
+                    this.updateAlert('Success', 'Subscribed successfully', false);
+                  } else {
+                    this.updateAlert('Error', 'No searching user', false);
+                  }
+                }, error => {
+                  console.log('错误', error.message)
+                })
+
+
         }, this.loadingTime1);
       } else {
         this.showAlert('Error', 'Please enter text to subscribe.', false);
