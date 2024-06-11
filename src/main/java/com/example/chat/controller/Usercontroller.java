@@ -73,7 +73,17 @@ public class Usercontroller {
     public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
         // 在这里处理注册逻辑，可以访问request中的username、email和password等信息
         // 比如保存用户信息到数据库等操作
-        return ResponseEntity.ok("Registration successful");
+        User user = usermapper.getUser(request.getUsername());
+        if(user==null) {
+            User userin = new User();
+            userin.setUserName(request.getUsername());
+            userin.setEmail(request.getEmail());
+            userin.setPassword(request.getPassword());
+            int i = usermapper.insertUser(userin);
+            if(i > 0) return ResponseEntity.ok("Registration successful");
+            else return ResponseEntity.status(404).body("Registration failed");
+        }
+        return ResponseEntity.status(404).body("Registration failed");
     }
 
 
