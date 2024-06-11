@@ -1,7 +1,7 @@
 package com.example.chat.controller;
 
 import com.example.chat.entiy.LoginRequest;
-import com.example.chat.entiy.Mess_save;
+import com.example.chat.entiy.Message;
 import com.example.chat.entiy.RegisterRequest;
 import com.example.chat.entiy.User;
 import com.example.chat.upper.Usermapper;
@@ -63,7 +63,8 @@ public class Usercontroller {
         // 比如验证用户信息，生成并返回token等操作
         User user = usermapper.getUser(request.getUsername());
         System.out.println(user);
-        if(user!=null) return ResponseEntity.status(200).body(user);
+        if(user==null) return ResponseEntity.status(404).body(null);
+        if( user.getPassword().equals(request.getPassword()) ) return ResponseEntity.status(200).body(user);
         else return ResponseEntity.status(404).body(null);
     }
 
@@ -75,10 +76,5 @@ public class Usercontroller {
         return ResponseEntity.ok("Registration successful");
     }
 
-    @Operation(summary = "聊天信息存储")
-    @PostMapping("/api/save")
-    public void message_save(@RequestBody Mess_save mess_save) {
-        usermapper.insertMessage(mess_save);
-    }
 
 }
