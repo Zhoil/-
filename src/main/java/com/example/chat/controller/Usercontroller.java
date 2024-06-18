@@ -1,11 +1,11 @@
 package com.example.chat.controller;
 
 import com.example.chat.entiy.LoginRequest;
-import com.example.chat.entiy.Message;
 import com.example.chat.entiy.RegisterRequest;
 import com.example.chat.entiy.User;
 import com.example.chat.upper.Usermapper;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,15 +17,8 @@ import java.util.List;
 @CrossOrigin
 public class Usercontroller {
 
-//    @Autowired
-//    private Usercon usercon;
 
-//    @Operation(summary = "获取name")
-//    @GetMapping("/user/{id}")
-//    public String getUserById(@PathVariable String name) {
-//        System.out.println(name);
-//        return name;
-//    }
+    private int id = 2;
 
     @Autowired
     private Usermapper usermapper;
@@ -49,8 +42,8 @@ public class Usercontroller {
     }
 
     @Operation(summary = "查询用户")
-    @GetMapping("/api/login/{name}")
-    public String query(@PathVariable String name) throws Exception {
+    @GetMapping("/api/user/searchUserByUserName")
+    public String query(String name) throws Exception {
         User user = usermapper.getUser(name);
         if(user!=null) return "OK";
         else return "NO";
@@ -76,6 +69,7 @@ public class Usercontroller {
         User user = usermapper.getUser(request.getUsername());
         if(user==null) {
             User userin = new User();
+            userin.setUserId(String.valueOf(id++));
             userin.setUserName(request.getUsername());
             userin.setEmail(request.getEmail());
             userin.setPassword(request.getPassword());
