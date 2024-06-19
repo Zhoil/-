@@ -9,7 +9,7 @@ import lombok.Data;
 public class MessageForm {
 
     // 发送用户和接收用户完整聊天消息列表
-    private List<Message> messages = new ArrayList<>();
+    private List<unReadMessage> messages = new ArrayList<>();
     // 未读消息数量
     private Integer noReadMessageLength;
     // 在线标识

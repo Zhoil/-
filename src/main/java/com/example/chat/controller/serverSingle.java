@@ -1,6 +1,7 @@
 package com.example.chat.controller;
 
 import com.example.chat.entiy.Imsingle;
+import com.example.chat.entiy.unReadMessage;
 import com.example.chat.service.SingleService;
 import jakarta.annotation.Resource;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +29,9 @@ public class serverSingle {
     }
 
     @GetMapping("/unReadNums")
-    public int findUnReadNums(@RequestParam String fromUser, @RequestParam String toUser) {
-        return serverSingleService.findUnReadNums(fromUser,toUser);
+    public ResponseEntity<List<unReadMessage>> findUnReadNums(@RequestParam String fromUser, @RequestParam String toUser) {
+        List<unReadMessage> all = serverSingleService.findUnReadNums(fromUser, toUser);
+        return ResponseEntity.status(201).body(all);
     }
 
 }

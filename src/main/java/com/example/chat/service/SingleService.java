@@ -1,6 +1,7 @@
 package com.example.chat.service;
 
 import com.example.chat.entiy.Imsingle;
+import com.example.chat.entiy.unReadMessage;
 import com.example.chat.upper.Usermapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,13 +32,9 @@ public class SingleService {
         return list;
     }
 
-    public int findUnReadNums(String fromUser,String toUser) {
-        AtomicInteger sum= new AtomicInteger();
-        List<Imsingle> list = SingleDao.findByUsername(fromUser,toUser);
-        list.forEach(x -> {
-            if(x.getIs_read() == 0) sum.addAndGet(1);
-        });
-        return sum.get();
+    public List<unReadMessage> findUnReadNums(String fromUser, String toUser) {
+
+        return SingleDao.findUnReadNums(fromUser,toUser);
     }
 
 }
