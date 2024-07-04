@@ -10,12 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.List;
 
 
 @RestController
+@RequestMapping("/api")
 @CrossOrigin
 public class UserController {
 
@@ -34,7 +33,7 @@ public class UserController {
     }
 
     @Operation(summary = "发送好友请求")
-    @GetMapping("/api/add_req")
+    @GetMapping("/add_req")
     public String req(@RequestParam("name") String name) throws Exception {
         User user = usermapper.getUser(name);
         //向指定用户发送好友请求
@@ -44,15 +43,15 @@ public class UserController {
     }
 
     @Operation(summary = "查询用户")
-    @GetMapping("/api/user/searchUserByUserName")
+    @GetMapping("/user/searchUserByUserName")
     public String query(String name) throws Exception {
         User user = usermapper.getUser(name);
-        if(user!=null) return "OK";
+        if(user!=null) return user.getUser_name();
         else return "NO";
     }
 
     @Operation(summary = "发送请求，验证登陆")
-    @PostMapping("/api/login")
+    @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody LoginRequest request) {
         // 在这里处理登录逻辑，可以访问request中的username和password
         // 比如验证用户信息，生成并返回token等操作
@@ -68,7 +67,7 @@ public class UserController {
     }
 
     @Operation(summary = "发送注册请求")
-    @PostMapping("/api/register")
+    @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
         // 在这里处理注册逻辑，可以访问request中的username、email和password等信息
         // 比如保存用户信息到数据库等操作
@@ -89,7 +88,7 @@ public class UserController {
     }
 
     @Operation(summary = "登出")
-    @PostMapping("/api/logout?id=")
+    @PostMapping("/logout?id=")
     public ResponseEntity<String> logout(@RequestParam("id") String user_id) {
         User user = usermapper.getUser(user_id);
         user.setStatus(0);

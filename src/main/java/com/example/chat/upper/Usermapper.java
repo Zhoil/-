@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper
 public interface Usermapper {
 
-    @Select("select * from user")
+    @Select("select * from [user]")
     public List<User> getUsers();
 
     @Select("select * from [user] where user_name=#{user_name}")
@@ -27,6 +27,12 @@ public interface Usermapper {
             @Result(property = "status", column = "status")
     })
     User getUser(String user_name);
+
+    @Select("select user_name from [user] where user_id=#{user_id}")
+    @Results({
+            @Result(property = "user_id", column = "user_id"),
+    })
+    String getUserName(String user_id);
 
     @Select("select * from [message] where send_user=#{fromUser} and receive_user=#{toUser}")
     public List<Imsingle> findByUsername(String fromUser, String toUser);
