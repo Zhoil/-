@@ -5,9 +5,8 @@
     <div class="img"></div>
     <div class="article"><p>THE STORY</p></div>
     <div class="block"></div>
-    <div class="headline"><h1>THE NOD</h1>by Kayo Chingonyi </div>
-    <div class="para"><p>When we’re strangers that pass each other / in the street, it will come<br> down to this tilt / of the head — acknowledging another / version of<br> events set in a new-build / years from now, a mess of a place filled / with<br> books and records, our kids thick as thieves / redefining all notions of<br> mischief. <br>
-      Perhaps our paths will cross in a city / of seven hills as the light draws<br> your face / out from the bliss of anonymity. / Maybe you’ll be stroking the<br> goose-down nape / of a small child with eyes the exact shade / of those I<br> met across a room at the startof this pain-in-the-heart, this febrile<br> dance. </p></div>
+    <div class="headline" :data-content="content"><h1>{{ title }}</h1>by {{ name }} </div>
+    <div class="para" contenteditable="true" ><p>{{ TextContent }}</p></div>
     <div id="dot"></div>
 
     <div class="modal-footer">
@@ -21,16 +20,49 @@
 <script>
 export default {
   name: 'SelfCard',
+  props: {
+
+    name: {
+      type: String,
+      default: 'Alert'
+    },
+    TextContent: {
+      type: String,
+      required: true
+    },
+    title: {
+      type: String,
+      default: 'Alert'
+    }
+
+  },
+
+  created() {
+    this.content = this.$route.query.LoginID;
+  },
+
   data() {
     return {
-      SelfVis: true
+      content: '',
+      SelfVis: true,
     };
   },
   methods: {
+
     closeCard() {
-      this.SelfVis = false;
+      this.SelfVis = !this.SelfVis;
       this.$emit('close');
     }
+
+  },
+  watch: {
+    content(newValue) {
+      document.documentElement.style.setProperty('--content', `"${newValue}"`);
+    }
+  },
+
+  mounted() {
+    document.documentElement.style.setProperty('--content', `"${this.content}"`);
   }
 };
 
@@ -64,7 +96,7 @@ html, body {
   top: 50%;
   left: 50%;
   transform: translateX(-50%) translateY(-50%);
-  z-index: 1;
+  z-index: 2;
   animation: fadeIn 1.5s ease-in;
 }
 
@@ -96,11 +128,11 @@ html, body {
 .para {
   position: absolute;
   top: 50%;
-  left: 44%;
+  left: 50%;
   transform: translateX(20%) translateY(-20%);
   text-align: center;
   font-family: 'Playfair Display', serif;
-  font-size: 10px;
+  font-size: 20px;
 }
 #dot {
   position: absolute;
@@ -144,7 +176,7 @@ html, body {
   transform: translateX(-75%) translateY(240%);
 }
 .article:after {
-  content: "2437537088";
+  content: var(--content);
   position: absolute;
   height: 200px;
   width: 100px;

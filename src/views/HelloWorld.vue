@@ -1,6 +1,10 @@
+
 <template>
+
   <body>
+
   <div class="container">
+
     <span></span>
     <span></span>
     <span></span>
@@ -44,40 +48,36 @@
         </a>
       </div>
     </form>
+
   </div>
+
   </body>
+
 </template>
 
 <script>
 import axios from "axios";
-import {mapState} from "vuex";
 
 export default {
   name: "HelloWorld",
   data() {
     return {
       isSignUp: false,
+
       loginUsername: '',
       loginPassword: '',
+
       signupUsername: '',
       signupEmail: '',
       signupPassword: '',
       confirmPassword: '',
 
+      loginID:'',
       checkUser:''
     }
   },
 
-  computed: {
-    ...mapState({
-      users: state => state.users
-    })
-  },
-
   methods: {
-    findUser() {
-      this.checkUser = this.users.find(user => user.name === this.loginUsername);
-    },
 
     toggleSignUp() {
       this.isSignUp = !this.isSignUp;
@@ -89,13 +89,9 @@ export default {
     },
 
     signIn: function () {
-      this.findUser();
-      if(this.checkUser) {
-        alert("-----该用户已登录-----");
-        return;
-      }
+
       if(this.loginUsername === '') {
-        alert("Please enter your name");
+        alert("Please enter your username");
         return;
       }
       if(this.loginPassword === ''){
@@ -104,27 +100,19 @@ export default {
       }
 
       // 发送登录请求
-      axios.post('http://127.0.0.1:8088/api/login', {
+      axios.post('/api/login', {
         username: this.loginUsername,
         password: this.loginPassword
       })
           .then(response => {
             if (response.status === 200) {
-              window.alert("Successfully Login");
+                window.alert("Successfully Login");
+                this.loginID = response.data.user_id;
 
-              // const users = JSON.parse(localStorage.getItem('users')) || [];
-              // // 创建一个新的用户对象
-              // const newUser = { username: this.loginUsername }; // 你可以根据实际情况定义新用户的属性
-              // // 将新用户对象添加到 users 数组中
-              // users.push(newUser);
-              // // 将更新后的 users 数组保存到 localStorage 中
-              // localStorage.setItem('users', JSON.stringify(users));
-              localStorage.setItem('user', JSON.stringify(this.loginUsername));
+                // 将更新后的 userid 数组保存到 localStorage 中
+                localStorage.setItem('userid', JSON.stringify(this.loginID));
 
-
-              this.$store.commit('addUser', this.loginUsername);
-
-              this.$router.push('/Chat/' + this.loginUsername);
+                this.$router.push('/Chat?LoginID=' + this.loginID);
             } else window.alert(response.message);
             // 登录成功处理逻辑
             console.log(response);
@@ -158,7 +146,7 @@ export default {
       }
 
       // 发送注册请求
-      axios.post('http://127.0.0.1:8088/api/register', {
+      axios.post('/api/register', {
         username: this.signupUsername,
         email: this.signupEmail,
         password: this.signupPassword,
@@ -178,6 +166,7 @@ export default {
             window.alert("An error occurred while registering in");
             // 处理注册失败逻辑
             console.error(error);
+            
           });
     }
   },
@@ -189,6 +178,7 @@ export default {
 /* Add your CSS styles here */
 *
 {
+  display: flex;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -329,6 +319,7 @@ form#sign_up_Form
 {
   left: 100%;
 }
+
 body.signup form#sign_in_Form
 {
   left: -100%;

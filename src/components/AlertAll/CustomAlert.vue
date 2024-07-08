@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     closeAlert() {
-      this.visible = false;
+      this.visible = !this.visible;
       this.$emit('close');
     }
   }

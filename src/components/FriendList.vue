@@ -8,36 +8,41 @@
     </svg>
   </button>
 
-  <div v-if="friendListVisible" class="friend-list">
+  <div :class="['friend-list', { collapsed: friendListVisible }]">
 
-    <h2>Friends List</h2>
-    <ul>
-      <li v-for="(friend, index) in friends" :key="index" @click="selectFriend(friend)">
-        {{ friend.name }}
+    <h2>{{ this.$store.Fri ? this.$store.Fri:'Friends List' }}</h2>
+    <ul v-if="state">
+      <li v-for="(friend, index) in this.friends" :key="index" :class="{ selected: selectedFriend === friend }" @click="selectFriend(friend)">
+        {{ friend.name }} {{ this.receivedData }}
+      </li>
+    </ul>
+    <ul v-else>
+      <li v-for="(lis, index) in this.list" :key="index" :class="{ selected: selectedFriend === lis }" @click="selectFriend(lis)">
+        {{ lis.name }}
       </li>
     </ul>
 
     <div class="InputContainer">
-      <input placeholder="Search.." id="input" class="input" name="text" type="text" v-model="searchText">
+      <input placeholder="Search.." id="input" class="input" name="text" type="text" v-model="searchText" >
       <input class="button--submit" value="Subscribe" type="submit" @click="subscribeButton">
     </div>
 
     <div class="input-">
-      <button class="value" @click="mess1()">
+      <button class="value" @click="mMit()">
         <svg data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="m1.5 13v1a.5.5 0 0 0 .3379.4731 18.9718 18.9718 0 0 0 6.1621 1.0269 18.9629 18.9629 0 0 0 6.1621-1.0269.5.5 0 0 0 .3379-.4731v-1a6.5083 6.5083 0 0 0 -4.461-6.1676 3.5 3.5 0 1 0 -4.078 0 6.5083 6.5083 0 0 0 -4.461 6.1676zm4-9a2.5 2.5 0 1 1 2.5 2.5 2.5026 2.5026 0 0 1 -2.5-2.5zm2.5 3.5a5.5066 5.5066 0 0 1 5.5 5.5v.6392a18.08 18.08 0 0 1 -11 0v-.6392a5.5066 5.5066 0 0 1 5.5-5.5z" fill="#7D8590"></path></svg>
-        Public messages
+        Friend in name
       </button>
-      <button class="value" @click="mess2()">
+      <button class="value" @click="Group()">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="Line"><path d="m17.074 30h-2.148c-1.038 0-1.914-.811-1.994-1.846l-.125-1.635c-.687-.208-1.351-.484-1.985-.824l-1.246 1.067c-.788.677-1.98.631-2.715-.104l-1.52-1.52c-.734-.734-.78-1.927-.104-2.715l1.067-1.246c-.34-.635-.616-1.299-.824-1.985l-1.634-.125c-1.035-.079-1.846-.955-1.846-1.993v-2.148c0-1.038.811-1.914 1.846-1.994l1.635-.125c.208-.687.484-1.351.824-1.985l-1.068-1.247c-.676-.788-.631-1.98.104-2.715l1.52-1.52c.734-.734 1.927-.779 2.715-.104l1.246 1.067c.635-.34 1.299-.616 1.985-.824l.125-1.634c.08-1.034.956-1.845 1.994-1.845h2.148c1.038 0 1.914.811 1.994 1.846l.125 1.635c.687.208 1.351.484 1.985.824l1.246-1.067c.787-.676 1.98-.631 2.715.104l1.52 1.52c.734.734.78 1.927.104 2.715l-1.067 1.246c.34.635.616 1.299.824 1.985l1.634.125c1.035.079 1.846.955 1.846 1.993v2.148c0 1.038-.811 1.914-1.846 1.994l-1.635.125c-.208.687-.484 1.351-.824 1.985l1.067 1.246c.677.788.631 1.98-.104 2.715l-1.52 1.52c-.734.734-1.928.78-2.715.104l-1.246-1.067c-.635.34-1.299.616-1.985.824l-.125 1.634c-.079 1.035-.955 1.846-1.993 1.846zm-5.835-6.373c.848.53 1.768.912 2.734 1.135.426.099.739.462.772.898l.18 2.341 2.149-.001.18-2.34c.033-.437.347-.8.772-.898.967-.223 1.887-.604 2.734-1.135.371-.232.849-.197 1.181.089l1.784 1.529 1.52-1.52-1.529-1.784c-.285-.332-.321-.811-.089-1.181.53-.848.912-1.768 1.135-2.734.099-.426.462-.739.898-.772l2.341-.18h-.001v-2.148l-2.34-.18c-.437-.033-.8-.347-.898-.772-.223-.967-.604-1.887-1.135-2.734-.232-.37-.196-.849.089-1.181l1.529-1.784-1.52-1.52-1.784 1.529c-.332.286-.81.321-1.181.089-.848-.53-1.768-.912-2.734-1.135-.426-.099-.739-.462-.772-.898l-.18-2.341-2.148.001-.18 2.34c-.033.437-.347.8-.772.898-.967.223-1.887.604-2.734 1.135-.37.232-.849.197-1.181-.089l-1.785-1.529-1.52 1.52 1.529 1.784c.285.332.321.811.089 1.181-.53.848-.912 1.768-1.135 2.734-.099.426-.462.739-.898.772l-2.341.18.002 2.148 2.34.18c.437.033.8.347.898.772.223.967.604 1.887 1.135 2.734.232.37.196.849-.089 1.181l-1.529 1.784 1.52 1.52 1.784-1.529c.332-.287.813-.32 1.18-.089z" id="XMLID_1646_" fill="#7D8590"></path><path d="m16 23c-3.859 0-7-3.141-7-7s3.141-7 7-7 7 3.141 7 7-3.141 7-7 7zm0-12c-2.757 0-5 2.243-5 5s2.243 5 5 5 5-2.243 5-5-2.243-5-5-5z" fill="#7D8590" id="XMLID_1645_"></path></svg>
-        Account
+        Create group
       </button>
       <button class="value" @click="per">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><path d="m109.9 20.63a6.232 6.232 0 0 0 -8.588-.22l-57.463 51.843c-.012.011-.02.024-.031.035s-.023.017-.034.027l-4.721 4.722a1.749 1.749 0 0 0 0 2.475l.341.342-3.16 3.16a8 8 0 0 0 -1.424 1.967 11.382 11.382 0 0 0 -12.055 10.609c-.006.036-.011.074-.015.111a5.763 5.763 0 0 1 -4.928 5.41 1.75 1.75 0 0 0 -.844 3.14c4.844 3.619 9.4 4.915 13.338 4.915a17.14 17.14 0 0 0 11.738-4.545l.182-.167a11.354 11.354 0 0 0 3.348-8.081c0-.225-.02-.445-.032-.667a8.041 8.041 0 0 0 1.962-1.421l3.16-3.161.342.342a1.749 1.749 0 0 0 2.475 0l4.722-4.722c.011-.011.018-.025.029-.036s.023-.018.033-.029l51.844-57.46a6.236 6.236 0 0 0 -.219-8.589zm-70.1 81.311-.122.111c-.808.787-7.667 6.974-17.826 1.221a9.166 9.166 0 0 0 4.36-7.036 1.758 1.758 0 0 0 .036-.273 7.892 7.892 0 0 1 9.122-7.414c.017.005.031.014.048.019a1.717 1.717 0 0 0 .379.055 7.918 7.918 0 0 1 4 13.317zm5.239-10.131c-.093.093-.194.176-.293.26a11.459 11.459 0 0 0 -6.289-6.286c.084-.1.167-.2.261-.3l3.161-3.161 6.321 6.326zm7.214-4.057-9.479-9.479 2.247-2.247 9.479 9.479zm55.267-60.879-50.61 56.092-9.348-9.348 56.092-50.61a2.737 2.737 0 0 1 3.866 3.866z" fill="#7D8590"></path></svg>
         Appearance
       </button>
-      <button class="value" @click="mess4()">
+      <button class="value" @click="SetMood()">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="svg8"><g transform="translate(-33.022 -30.617)" id="layer1"><path d="m49.021 31.617c-2.673 0-4.861 2.188-4.861 4.861 0 1.606.798 3.081 1.873 3.834h-7.896c-1.7 0-3.098 1.401-3.098 3.1s1.399 3.098 3.098 3.098h4.377l.223 2.641s-1.764 8.565-1.764 8.566c-.438 1.642.55 3.355 2.191 3.795s3.327-.494 3.799-2.191l2.059-5.189 2.059 5.189c.44 1.643 2.157 2.631 3.799 2.191s2.63-2.153 2.191-3.795l-1.764-8.566.223-2.641h4.377c1.699 0 3.098-1.399 3.098-3.098s-1.397-3.1-3.098-3.1h-7.928c1.102-.771 1.904-2.228 1.904-3.834 0-2.672-2.189-4.861-4.862-4.861zm0 2c1.592 0 2.861 1.27 2.861 2.861 0 1.169-.705 2.214-1.789 2.652-.501.203-.75.767-.563 1.273l.463 1.254c.145.393.519.654.938.654h8.975c.626 0 1.098.473 1.098 1.1s-.471 1.098-1.098 1.098h-5.297c-.52 0-.952.398-.996.916l-.311 3.701c-.008.096-.002.191.018.285 0 0 1.813 8.802 1.816 8.82.162.604-.173 1.186-.777 1.348s-1.184-.173-1.346-.777c-.01-.037-3.063-7.76-3.063-7.76-.334-.842-1.525-.842-1.859 0 0 0-3.052 7.723-3.063 7.76-.162.604-.741.939-1.346.777s-.939-.743-.777-1.348c.004-.019 1.816-8.82 1.816-8.82.02-.094.025-.189.018-.285l-.311-3.701c-.044-.518-.477-.916-.996-.916h-5.297c-.627 0-1.098-.471-1.098-1.098s.472-1.1 1.098-1.1h8.975c.419 0 .793-.262.938-.654l.463-1.254c.188-.507-.062-1.07-.563-1.273-1.084-.438-1.789-1.483-1.789-2.652.001-1.591 1.271-2.861 2.862-2.861z" id="path26276" fill="#7D8590"></path></g></svg>
-        Accessibility
+        Set personal mood
       </button>
       <button class="value" @click="logout">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M294.1 105.9L171.3 228.7c-7.2 7.2-11.3 17.1-11.3 27.3s4.1 20.1 11.3 27.3L294.1 406.1c6.4 6.4 15 9.9 24 9.9c18.7 0 33.9-15.2 33.9-33.9l0-62.1 128 0c17.7 0 32-14.3 32-32l0-64c0-17.7-14.3-32-32-32l-128 0 0-62.1c0-18.7-15.2-33.9-33.9-33.9c-9 0-17.6 3.6-24 9.9zM160 416l-64 0c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32l64 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L96 32C43 32 0 75 0 128L0 384c0 53 43 96 96 96l64 0c17.7 0 32-14.3 32-32s-14.3-32-32-32z"/></svg>
@@ -59,94 +64,183 @@
 
   <SelfCard
       v-if="selfVisible"
+      :title="Title"
+      :name="LoginID"
+      :TextContent="TextContent"
       @close="selfVisible = false"
   />
+
+  <Mood
+      v-if="MoodVisible"
+      @update-title="TiTle"
+      @update-MESSAGE="MessAge"
+      @close="MoodVisible = false"
+  />
+
 
 </template>
 
 <script>
 import SelfCard from "@/components/card/SelfCard.vue";
-import CustomAlert from "@/components/CustomAlert.vue";
+import CustomAlert from "@/components/AlertAll/CustomAlert.vue";
 import axios from "axios";
+import Mood from "@/components/card/MoodIN.vue";
 
 export default {
   components: {
+    Mood,
     CustomAlert,
     SelfCard
   },
+
   data() {
     return {
+
+      selectedFriend: null,
       friends: [
         { name: 'Alice' },
         { name: 'Bob' },
         { name: 'Charlie' },
-        { name: 'David' },
-        { name: 'David' },
-        { name: 'David' },
-        { name: 'David' },
-        { name: 'David' },
-        { name: 'David' },
-        { name: 'David' },
-        { name: 'David' },
-        { name: 'David' },
-        { name: 'David' },
-        { name: 'David' },
-        { name: 'David' },
-        { name: 'David' },
-        { name: 'David' },
-        { name: 'David' }
+        { name: 'zh' },
       ],
-      friendListVisible: true,  // Add this line
+      list:[],
+      receivedData:[],
+
+      //个人简介
+      Title:'',
+      LoginID:'',
+      LoginName:'',
+      TextContent:'',
+
+      //好友列表
       searchText:'',
       alertVisible: false,
       alertTitle: '',
       alertMessage: '',
       loading: false,
-      loadingTime1: 600, // 设置加载时间
-      loadingTime2: 100,
+      loadingTime1: 500, // 设置加载时间
+      loadingTime2: 1000,
 
-      selfVisible:false
+      //控制属性
+      friendListVisible: false,  // Add this line
+      selfVisible:false,
+      MoodVisible:false,
+      GroupVisible:false,
+
+      state:true,
+
     };
   },
+
+
+  created() {
+    this.LoginID = this.$route.query.LoginID;
+    // axios({
+    //   method: "POST",
+    //   url: "/apd/link?login_userid="+this.LoginID,
+    // })
+    //     .then(response=>{
+    //       this.LoginName = response.data.user_name;
+    //     })
+  },
+
   methods: {
 
+    mMit() {
+      this.list = [];
+
+      //循环模拟数据的数组
+      this.friends.map((friend) => {
+        //拿当前json的id、name、time去分别跟输入的值进行比较
+        //indexOf 如果在检索的字符串中没有出现要找的值是会返回-1的，所以我们这里不等于-1就是假设输入框的值在当前json里面找到的情况
+        if (friend.name.indexOf(this.searchText) !== -1) {
+          //然后把当前json添加到list数组中
+          this.list.push(friend);
+        }
+      })
+
+      // 判断展示ul列表，如果输入了就展示没输入就不展示
+      if (this.searchText.length > 0) {
+        // this.state = true;
+        if (this.list.length > 0){
+          this.state = false;
+        }else {
+          this.state = true;
+        }
+      } else {
+        this.state = true;
+      }
+    },
+
+    Group() {
+      window.open(this.$router.resolve({ name: 'CGroup' }).href, '_blank');
+      window.addEventListener('message', this.receiveMessage, false);
+    },
+    receiveMessage(event) {
+      if (event.origin === window.location.origin) {
+        const data = JSON.parse(event.data);
+        this.receivedData = data.selectedOptions;
+        console.log(this.receivedData);
+      }
+    },
+
+    SetMood() {
+      this.MoodVisible = !this.MoodVisible;
+    },
+
     per() {
-      this.selfVisible = true
+      this.selfVisible = !this.selfVisible;
     },
 
     logout() {
+      this.showAlert('Loading', '', true);
 
-        // 清除 localStorage 中的 'user' 键值对
-        // localStorage.removeItem('user');
-        const path = window.location.pathname;
-        const users = JSON.parse(localStorage.getItem('users')) || [];
-        const updatedUsers = users.filter(user => user.username !== path.split('/')[2]);
-        localStorage.setItem('users', JSON.stringify(updatedUsers)); // 更新 localStorage 中的数组
+      setTimeout(() => {
 
-        this.$store.commit('deleteUser', path.split('/')[2]);
-        // 进行其他退出登录相关的操作，比如重定向到登录页面或者刷新页面
-        // 例如，重定向到登录页面
+        axios({
+          method: "POST",
+          url: "/api/logout?id=" + this.LoginID,
+        })
+            .then(response => {
+              if (response.data === 'OK') {
+
+                this.updateAlert('Logout Successfully', 'Subscribed successfully', false);
+
+              } else {
+
+                this.updateAlert('Error', 'Something wrong', false);
+
+              }
+            })
+            .catch( error => {
+
+                  console.log('错误', error.message)
+                  this.updateAlert('Error', `There was an error! ${error}`, false);
+                  console.error('There was an error!', error);
+
+                })
+
+            },this.loadingTime2)
+
+        //重定向到登录页面
         this.$router.push('/Logins');
-    },
+      },
+
 
     toggleFriendList() {
       this.friendListVisible = !this.friendListVisible;
     },
 
     selectFriend(friend) {
-      setTimeout(() => {
-        const path = window.location.pathname;
-        this.$router.push('/Chat/'+ path.split('/')[2] + '?name=' + friend.name);
+      this.selectedFriend = friend;
+      this.$store.Fri = friend.name
+      this.handleInputClick()
 
-        // this.currentFriend = friend;
-        // // 保存当前选中好友到本地存储
-        // localStorage.setItem('currentFriend', JSON.stringify(friend));
-
-      }, this.loadingTime2);
 
     },
 
     subscribeButton(){
+
       if (this.searchText) {
         this.showAlert('Loading', '', true);
 
@@ -160,20 +254,31 @@ export default {
               }
             })
                 .then(response => {
-                  if (response.data === 'OK') {
-                    this.updateAlert('Success', 'Subscribed successfully', false);
+                  if (response.data !== 'NO') {
+                    this.updateAlert('Success', 'Subscribed successfully ' + response.data, false);
+
                   } else {
                     this.updateAlert('Error', 'No searching user', false);
                   }
-                }, error => {
+                }).catch( error => {
                   console.log('错误', error.message)
+                  this.updateAlert('Error', `There was an error! ${error}`, false);
+                  console.error('There was an error!', error);
                 })
-
 
         }, this.loadingTime1);
       } else {
         this.showAlert('Error', 'Please enter text to subscribe.', false);
       }
+    },
+
+
+    handleInputClick(){
+      // 触发正式查询api操作
+      // 清空关键字列表
+      this.list = []
+      // 显示结果
+      this.state = true
     },
 
     showAlert(title, message, loading) {
@@ -188,11 +293,29 @@ export default {
       this.loading = loading;
     },
 
+    TiTle(message) {
+      this.Title = message;
+    },
+
+    MessAge(message) {
+      this.TextContent = message;
+    }
+
   }
 };
 </script>
 
-<style>
+<style scoped>
+
+
+/* 定义进入和离开动画 */
+.slide-fade-enter-active, .slide-fade-leave-active {
+  transition: all 1s ease;
+}
+.slide-fade-enter, .slide-fade-leave-to /* .slide-fade-leave-active in <2.1.8 */ {
+  transform: translateX(100%);
+  opacity: 0;
+}
 
 /* ***** 列表隐藏CSS ********** */
 
@@ -201,8 +324,8 @@ export default {
   position: absolute;
   margin: auto;
   padding: 12px 18px;
-  transition: all 0.2s ease;
-  left: 10%;
+  transition: all 0.3s ease;
+  left: 12%;
   border: none;
   background: none;
   cursor: pointer;
@@ -266,14 +389,22 @@ export default {
   border-right: 1px solid #ccc;
   padding: 10px;
   background-color: #cccccc;
-
+  transition: all 1s ease;
+  overflow: hidden;
 }
+
+.friend-list.collapsed {
+  width: 0;
+  padding: 0;
+}
+
 .friend-list h2 {
   color: #007bff;
   border-bottom: 1px solid #45a049;
   margin-top: 0;
 }
 .friend-list ul {
+  height: 56.5vh;
   list-style: none;
   padding: 0;
   max-height: 56.5vh;
@@ -396,6 +527,9 @@ export default {
 .value svg {
   width: 20px
 }
+
+/* **************************************** */
+
 
 /* **************************************** */
 
