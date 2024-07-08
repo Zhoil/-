@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class SingleService {
@@ -23,7 +24,7 @@ public class SingleService {
     public List<Imsingle> findByUsername(String fromUser, String toUser) {
         List<Imsingle> list = SingleDao.findByUsername(fromUser,toUser);
         list.forEach(x -> {
-            if(x.getSend_user().equals(fromUser) && x.getReceive_user().equals(toUser)) {
+            if(Objects.equals(x.getSend_user(), fromUser) && Objects.equals(x.getReceive_user(), toUser)) {
                 x.setIs_read(1);
                 SingleDao.updateByPrimaryKey(x);
             }

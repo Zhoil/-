@@ -1,18 +1,32 @@
 package com.example.chat.entiy;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.sql.Timestamp;
 
-
+@Getter
+@Setter
 @Data
+@Table(name = "message")
 public class Imsingle {
-    String handle;
-    String send_user;
-    String receive_user;
-    String content;
-    int is_read;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "handle")
+    private String handle;
+
+    @Column(name = "send_user")
+    private String send_user;
+
+    @Column(name = "receive_user")
+    private String receive_user;
+
+    @Column(name = "content")
+    private String content;
+
+    @Column(name = "is_read")
+    private int is_read;
 
 
 }

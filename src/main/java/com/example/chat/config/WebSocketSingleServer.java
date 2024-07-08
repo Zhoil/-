@@ -22,6 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @ServerEndpoint(value = "/serverSingle")
 @Component
 public class WebSocketSingleServer implements InitializingBean {
+
     private static final Logger log = LoggerFactory.getLogger(WebSocketSingleServer.class);
     /**
      * 当前连接数量

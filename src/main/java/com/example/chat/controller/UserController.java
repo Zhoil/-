@@ -19,7 +19,7 @@ import java.util.List;
 public class UserController {
 
 
-    private int id = 2;
+    private int id = 3;
 
     @Autowired
     private Usermapper usermapper;
@@ -58,7 +58,7 @@ public class UserController {
         User user = usermapper.getUser(request.getUsername());
         System.out.println(user);
         if(user==null) return ResponseEntity.status(404).body(null);
-        if( user.getPassword().equals(request.getPassword()) ) {
+        if( user.getPassword().equals(request.getPassword()) && user.getStatus() == 0 ) {
             user.setStatus(1);
             usermapper.updateStatus(user);
             return ResponseEntity.status(200).body(user);
@@ -88,9 +88,9 @@ public class UserController {
     }
 
     @Operation(summary = "登出")
-    @PostMapping("/logout?id=")
-    public ResponseEntity<String> logout(@RequestParam("id") String user_id) {
-        User user = usermapper.getUser(user_id);
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(@RequestParam("id") String id) {
+        User user = usermapper.getUser_in(id);
         user.setStatus(0);
         usermapper.updateStatus(user);
         return ResponseEntity.status(200).body("Logout successful");
