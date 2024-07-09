@@ -12,13 +12,25 @@
 
     <h2>{{ this.$store.Fri ? this.$store.Fri:'Friends List' }}</h2>
     <ul v-if="state">
-      <li v-for="(friend, index) in this.friends" :key="index" :class="{ selected: selectedFriend === friend }" @click="selectFriend(friend)">
-        {{ friend.name }} {{ this.receivedData }}
+      <li v-for="(friend, index) in this.friends" :key="index" :class="{ selected: selectedFriend === friend }" @click="selectFriend(friend)" @contextmenu.prevent="showContextMenu($event)">
+        {{ friend.name }}
+        <ul v-if="contextMenuVisible" :style="{ top: `${contextMenuPosition.y}px`, left: `${contextMenuPosition.x}px` }" class="context-menu">
+          <li @click="onOptionClick('Option 1')">删除</li>
+        </ul>
+      </li>
+      <li v-for="(group, index) in this.receivedData" :key="index" @click="selectGroup(group)" @contextmenu.prevent="showContextMenu($event)">
+        {{ group }}
+        <ul v-if="contextMenuVisible" :style="{ top: `${contextMenuPosition.y}px`, left: `${contextMenuPosition.x}px` }" class="context-menu">
+          <li @click="onOptionClick('Option 1')">删除</li>
+        </ul>
       </li>
     </ul>
     <ul v-else>
-      <li v-for="(lis, index) in this.list" :key="index" :class="{ selected: selectedFriend === lis }" @click="selectFriend(lis)">
+      <li v-for="(lis, index) in this.list" :key="index" :class="{ selected: selectedFriend === lis }" @click="selectFriend(lis)" @contextmenu.prevent="showContextMenu($event)">
         {{ lis.name }}
+        <ul v-if="contextMenuVisible" :style="{ top: `${contextMenuPosition.y}px`, left: `${contextMenuPosition.x}px` }" class="context-menu">
+          <li @click="onOptionClick('Option 1')">删除</li>
+        </ul>
       </li>
     </ul>
 
@@ -96,6 +108,13 @@ export default {
   data() {
     return {
 
+      contextMenuVisible: false,
+      contextMenuPosition: {
+        x: 0,
+        y: 0
+      },
+
+      selectedGroup:'',
       selectedFriend: null,
       friends: [
         { name: 'Alice' },
@@ -128,6 +147,7 @@ export default {
       GroupVisible:false,
 
       state:true,
+      targetValue:'',
 
     };
   },
@@ -145,6 +165,30 @@ export default {
   },
 
   methods: {
+    //右键属性
+    showContextMenu(event) {
+      this.contextMenuVisible = true;
+      this.contextMenuPosition = {
+        x: event.clientX,
+        y: event.clientY
+      };
+      document.addEventListener('click', this.hideContextMenu);
+      this.targetValue = event.target.innerText
+      console.log(this.targetValue)
+    },
+    hideContextMenu() {
+      this.contextMenuVisible = false;
+      document.removeEventListener('click', this.hideContextMenu);
+    },
+    onOptionClick(option) {
+      console.log('Selected:', option);
+      if (option === 'Option 1' && this.targetValue) {
+        this.receivedData = this.receivedData.filter(item => item !== this.targetValue);
+      }
+      this.hideContextMenu();
+    },
+
+
 
     mMit() {
       this.list = [];
@@ -156,6 +200,14 @@ export default {
         if (friend.name.indexOf(this.searchText) !== -1) {
           //然后把当前json添加到list数组中
           this.list.push(friend);
+        }
+      })
+      this.receivedData.map((group) => {
+        //拿当前json的id、name、time去分别跟输入的值进行比较
+        //indexOf 如果在检索的字符串中没有出现要找的值是会返回-1的，所以我们这里不等于-1就是假设输入框的值在当前json里面找到的情况
+        if (group.indexOf(this.searchText) !== -1) {
+          //然后把当前json添加到list数组中
+          this.list.push(group);
         }
       })
 
@@ -179,7 +231,10 @@ export default {
     receiveMessage(event) {
       if (event.origin === window.location.origin) {
         const data = JSON.parse(event.data);
-        this.receivedData = data.selectedOptions;
+        console.log(data);
+        console.log(data.selectedOptions)
+        console.log(data.NAME)
+        this.receivedData.push(data.NAME+"::"+data.selectedOptions);
         console.log(this.receivedData);
       }
     },
@@ -234,6 +289,14 @@ export default {
     selectFriend(friend) {
       this.selectedFriend = friend;
       this.$store.Fri = friend.name
+      this.handleInputClick()
+
+
+    },
+    selectGroup(group) {
+      let data = group.split('::')
+      console.log(data[0])
+      this.$store.Fri = data[0];
       this.handleInputClick()
 
 
@@ -306,7 +369,20 @@ export default {
 </script>
 
 <style scoped>
-
+.context-menu {
+  position: absolute;
+  width: 100px;
+  background-color: white;
+  border: 1px solid #ccc;
+  height: 100px;
+}
+.context-menu li {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+.context-menu li:hover {
+  background-color: #f0f0f0;
+}
 
 /* 定义进入和离开动画 */
 .slide-fade-enter-active, .slide-fade-leave-active {

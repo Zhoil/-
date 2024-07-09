@@ -109,8 +109,8 @@ export default {
                 window.alert("Successfully Login");
                 this.loginID = response.data.user_id;
 
-                // 将更新后的 userid 数组保存到 localStorage 中
-                localStorage.setItem('userid', JSON.stringify(this.loginID));
+                // // 将更新后的 userid 数组保存到 localStorage 中
+                // localStorage.setItem('userid', JSON.stringify(this.loginID));
 
                 this.$router.push('/Chat?LoginID=' + this.loginID);
             } else window.alert(response.message);

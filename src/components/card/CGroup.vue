@@ -16,6 +16,7 @@
         <li v-for="(option, index) in selectedOptions" :key="index">{{ option }}</li>
       </ul>
     </div>
+    <input placeholder="群聊名称..." id="input" class="input" name="text" type="text" v-model="GroupName" >
     <button @click="sendData">Send Data</button>
   </div>
 </template>
@@ -28,14 +29,16 @@ export default {
       options: [
         { label: 'Alice-in', value: 'Alice' },
         { label: 'Bob-in', value: 'Bob' },
+        { label: 'Charlie-in', value: 'Charlie' },
         { label: 'zh-in', value: 'zh' },
       ],
       selectedOptions: [],
+      GroupName:'',
     };
   },
   methods: {
     sendData() {
-      const data = JSON.stringify({ selectedOptions: this.selectedOptions });
+      const data = JSON.stringify({ selectedOptions: this.selectedOptions,NAME: this.GroupName });
       console.log(data);
       window.opener.postMessage(data, '*');
     }

@@ -62,7 +62,16 @@ export default {
     //     .catch(error=>{
     //       console.error(error);
     //     })
-
+    this.messageView.push({
+      content: "你好ya",
+      timestamp: new Date(),
+      sender: 'me'
+    });
+    this.messageView.push({
+      content: "你好！",
+      timestamp: new Date(),
+      sender: 'other'
+    });
 
   },
 
